@@ -11,7 +11,7 @@ const CoffeeCard = ({item}) => {
       style={{
         borderRadius: 40,
         backgroundColor: '#824C1B',
-        height: 350,
+        height: 360,
         width: 270,
         overflow: 'visible', // Ensures the image can overflow outside
         elevation:20
@@ -27,7 +27,7 @@ const CoffeeCard = ({item}) => {
           overflow: 'visible', // Allows the image to extend beyond the boundaries
         }}
         className="flex-row justify-center -mt-14">
-        <Image source={item.image} className="h-40 w-40"  style={{elevation:10}}/>
+        <Image source={item.image} className="h-44 w-44"  style={{elevation:10}}/>
       </View>
       <View className="px-5 mt-5 space-y-3">
         <Text className="text-2xl text-white font-semibold z-10">
