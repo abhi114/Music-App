@@ -7,6 +7,7 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  Text,
 } from 'react-native';
 import {TextInput, Button, Title} from 'react-native-paper';
 import {OtpInput} from 'react-native-otp-entry';
@@ -14,6 +15,7 @@ import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import { MainFooter, validateEmail } from './helpers/helpers';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import LinearGradient from 'react-native-linear-gradient';
 
 const Register = () => {
   const [emailId, setEmailId] = useState('');
@@ -129,64 +131,12 @@ const Register = () => {
     );
   }
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <View style={styles.innerContainer}>
-        <Image
-          source={require('../assets/hirelogo.png')}
-          style={{
-            width: 250,
-            height: 50,
-            alignSelf: 'center',
-            marginBottom: 16,
-          }}
-          resizeMode="contain"
-        />
-        <Image
-          source={require('../assets/taxicar.png')}
-          style={{
-            width: 250,
-            height: 150,
-            alignSelf: 'center',
-            marginBottom: 16,
-          }}
-          resizeMode="contain"
-        />
+    <LinearGradient
+      colors={['rgba(58,131,244,0.4)', 'rgba(9,181,211,0.4)']}
+      className="w-full flex-1">
 
-        <Title style={styles.title}>Register</Title>
-
-        <TextInput
-          label="Email Id"
-          value={emailId}
-          onChangeText={setEmailId}
-          style={styles.input}
-        />
-        <TextInput
-          secureTextEntry={true}
-          label="Password"
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-        />
-
-        <Button
-          mode="contained"
-          onPress={handleRegister}
-          style={styles.button}
-          textColor="#000000">
-          Register
-        </Button>
-        <Button
-          mode="contained"
-          onPress={() => navigation.navigate('Login')}
-          style={styles.button}
-          textColor="#000000">
-          Go To Login
-        </Button>
-      </View>
-      <MainFooter />
-    </KeyboardAvoidingView>
+        <Text>Store Screen</Text>
+    </LinearGradient>
   );
 };
 

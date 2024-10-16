@@ -1,477 +1,239 @@
-import React, { useState } from 'react';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import React, {useState} from 'react';
 import {
-  ScrollView,
-  View,
+    Image,
+  SafeAreaView,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  TextInput,
-  Alert,
+  View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome'; // Replace with your icon library
-import Icon1 from 'react-native-vector-icons/Entypo'; // Replace with your icon library
-import Icon3 from 'react-native-vector-icons/MaterialCommunityIcons'; 
-import firestore from '@react-native-firebase/firestore';
-import { useNavigation } from '@react-navigation/native';
-import {Linking} from 'react-native';
- 
-const Home = ({route}) => {
-    const navigate = useNavigation();
-    const [startKm,setStartkm] = useState('');
-    const [endkm,setendKm] = useState('');
-    const [startFuel,setStartFuel] = useState('');
-    const [endFuel,setEndFuel] = useState('');
-    const [fuelcost,setfuelcost] = useState('');
-    const {
-      id,
-      name,
-      number,
-      Rprtdate,
-      endDate,
-      address,
-      city,
-      vehicleDetails,
-      dutyInstructions,
-      mainData,month
-    } = route.params;
-    const makecall = ()=>{
-      const phoneUrl = `tel:${number}`;
-      Linking.openURL(phoneUrl).catch(err =>
-        console.error('Failed to open URL:', err),
-      );
-    }
-    const storeFuelData = async () => {
-     try {
-       const userRef = firestore().collection('userInfo').doc(id); // Reference user document
-       const userDoc = await userRef.get(); // Get user document
-       const userData = userDoc.data(); // Convert user document to object
+import LinearGradient from 'react-native-linear-gradient';
+import {ArrowDownTrayIcon, Bars3CenterLeftIcon, BellIcon} from 'react-native-heroicons/solid';
+import {storeColors} from '../theme';
+import {ScrollView} from 'react-native';
+import GradientButton from './GradientButton'
+import GameCard from './GameCard';
 
-       if (userData.monthExpenditure) {
-         const currentMonthData = userData.monthExpenditure[month];
-         const totalCost =
-           (parseFloat(currentMonthData) || 0) + parseFloat(fuelcost);
-         const fuelData = {
-           [`monthExpenditure.${month}`]: totalCost.toString(),
-         };
-         await userRef.update(fuelData); // Set user data in the document
-         console.log('fuel data updated');
-       } else {
-         console.log('Monthly expenditure data not found');
-       }
-     } catch (error) {
-       console.error('Error storing fuel data:', error);
-     }
-    };
-    const storeData = async (startkmvalue,endkmvalue,startfuelValue,endfuelValue) => {
-      try {
-        const userRef = firestore().collection('users').doc(id); // Reference user document
-        mainData[Rprtdate].startKm=startkmvalue
-        mainData[Rprtdate].endKm = endkmvalue
-        mainData[Rprtdate].starFuel = startfuelValue + `lit`;
-        mainData[Rprtdate].endFuel = endfuelValue + `lit`;
-         mainData[Rprtdate].FuelCost = `Rs `+fuelcost;
-        
-        const updatedUserData = mainData // Add new key-value pair
-        console.log("updated data is" + JSON.stringify(updatedUserData));
-        await userRef.set(updatedUserData, {merge: true}); // Set user data in the document
-      } catch (error) {
-        console.error('Error storing user data:', error);
-      }
-    };
-    const [accept,setaccept] = useState(false);
-    
-    const afteraccept = async ()=>{
-        console.log("hit");
-        if(accept === false){
-        setaccept(true);
-        return;
-        }
-        if(startKm == '' || endkm == '' || startFuel== '' || endFuel == '' || fuelcost == ''){
-          Alert.alert("please enter the km and fuel values");
-          return;
-        }
-        await storeData(startKm,endkm,startFuel,endFuel);
-        await storeFuelData();
-        navigate.navigate('Duty', {
-          name,
-          number,
-          startKm,
-          endkm,
-          id,
-          startFuel,
-          endFuel,
-          Rprtdate,
-          endDate,
-          mainData,
-          fuelcost,
-          vehicleDetails,
-          address
-        });
+const categories = [
+  'Action',
+  'Family',
+  'Puzzle',
+  'Adventure',
+  'Racing',
+  'Education',
+  'Others',
+];
+const featured = [
+  {
+    id: 1,
+    title: 'Zooba',
+    image: require('../assets/images/zooba.png'),
+    downloads: '200k',
+    stars: 4,
+  },
+  {
+    id: 2,
+    title: 'Subway Surfer',
+    image: require('../assets/images/subway.png'),
+    downloads: '5M',
+    stars: 4,
+  },
+  {
+    id: 3,
+    title: 'Free Fire',
+    image: require('../assets/images/freeFire.png'),
+    downloads: '100M',
+    stars: 3,
+  },
 
-    }
+  {
+    id: 4,
+    title: "Alto's Adventure",
+    image: require('../assets/images/altosAdventure.png'),
+    downloads: '20k',
+    stars: 4,
+  },
+];
+const games = [
+  {
+    id: 1,
+    title: 'Shadow Fight',
+    image: require('../assets/images/shadowFight.png'),
+    downloads: '20M',
+    stars: 4.5,
+  },
+  {
+    id: 2,
+    title: 'Valor Arena',
+    image: require('../assets/images/valorArena.png'),
+    downloads: '10k',
+    stars: 3.4,
+  },
+  {
+    id: 3,
+    title: 'Frag',
+    image: require('../assets/images/frag.png'),
+    downloads: '80k',
+    stars: 4.6,
+  },
+  {
+    id: 4,
+    title: 'Zooba Wildlife',
+    image: require('../assets/images/zoobaGame.png'),
+    downloads: '40k',
+    stars: 3.5,
+  },
+  {
+    id: 4,
+    title: 'Clash of Clans',
+    image: require('../assets/images/clashofclans.png'),
+    downloads: '20k',
+    stars: 4.2,
+  },
+];
+const Stack = createNativeStackNavigator();
+export default Home = () => {
+  const [activeCategory, setActiveCategory] = useState('Action');
+  const [selectedGame,setSelectedGame] = useState(null);
   return (
-    <View style={styles.outerContainer}>
-      <ScrollView style={styles.container}>
-        <View style={styles.cardContainer}>
-          <View style={[styles.card, {marginBottom: 10}]}>
-            <View style={styles.header}>
-              <View style={styles.headerTextContainer}>
-                <Text style={styles.headerText}>{name}</Text>
-                <Text style={styles.headerText}>{number}</Text>
-              </View>
-              <TouchableOpacity
-                onPress={() => {
-                  makecall();
-                }}
-                style={styles.headerIconContainer}>
-                <Icon name="phone" size={35} color={'#ffA500'} />
-              </TouchableOpacity>
+    <ScrollView>
+      <LinearGradient
+        colors={['rgba(58,131,244,0.4)', 'rgba(9,181,211,0.4)']}
+        className="w-full flex-1">
+        <SafeAreaView>
+          <View className="container">
+            <View className="flex-row justify-between items-center px-4 mt-3">
+              <Bars3CenterLeftIcon color={storeColors.text} size={30} />
+              <BellIcon color={storeColors.text} size={30} />
             </View>
-          </View>
 
-          <View style={styles.card}>
-            <View style={styles.sectionRow}>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Reporting Date And Time</Text>
-                <Text style={styles.sectionText}>{Rprtdate}</Text>
-              </View>
-              <TouchableOpacity style={styles.sectionIconContainer}>
-                <Icon3
-                  name="clock-time-five-outline"
-                  size={32}
-                  color={'#000000'}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.line}></View>
-
-          <View style={styles.card}>
-            <View style={styles.sectionRow}>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>End Time</Text>
-                <Text style={styles.sectionText}>{endDate}</Text>
-              </View>
-              <TouchableOpacity style={styles.sectionIconContainer}>
-                <Icon3
-                  name="clock-time-ten-outline"
-                  size={32}
-                  color={'#000000'}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.line}></View>
-
-          <View style={styles.card}>
-            <View style={styles.sectionRow}>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Reporting Address</Text>
-                <Text style={styles.sectionText}>{address}</Text>
-              </View>
-              <TouchableOpacity style={styles.sectionIconContainer}>
-                <Icon1 name="location" size={30} color={'#000000'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.line}></View>
-
-          <View style={styles.card}>
-            <View style={styles.sectionRow}>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>City</Text>
-                <Text style={styles.sectionText}>{city}</Text>
-              </View>
-              <TouchableOpacity style={styles.sectionIconContainer}>
-                <Icon3 name="home-city-outline" size={32} color={'#000000'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.line}></View>
-
-          <View style={styles.card}>
-            <View style={styles.sectionRow}>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Vehicle Details</Text>
-                <Text style={styles.sectionText}>{vehicleDetails}</Text>
-              </View>
-              <TouchableOpacity style={styles.sectionIconContainer}>
-                <Icon3 name="car" size={32} color={'#000000'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.line}></View>
-
-          <View style={styles.card}>
-            <View style={styles.sectionRow}>
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Instructions</Text>
-                <Text style={styles.sectionText}>{dutyInstructions}</Text>
-              </View>
-              <TouchableOpacity style={styles.sectionIconContainer}>
-                <Icon3 name="information-outline" size={32} color={'#000000'} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View style={styles.line}></View>
-
-          {accept && (
-            <View>
-              <Text style={{margin: 8, color: '#000', fontWeight: 'bold',fontSize:18,alignSelf:'center'}}>
-                Final Readings
+            <View className="mt-3 space-y-4">
+              <Text
+                style={{color: storeColors.text}}
+                className="ml-4 text-3xl font-bold">
+                Browse Games
               </Text>
-              <View
-                style={{
-                  borderRadius: 10,
-                  margin: 7,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                }}>
-                <Text style={{margin: 8, color: '#0000FF', fontWeight: 'bold'}}>
-                  To Be Filled By The Driver
-                </Text>
-                <Icon3 name="car-info" size={22} color={'#0000FF'} />
+              <View className="pl-4">
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {categories.map(cat => {
+                    if (cat == activeCategory) {
+                      return (
+                        <GradientButton
+                          key={cat}
+                          containerClass="mr-2"
+                          value={cat}
+                        />
+                      );
+                    } else {
+                      return (
+                        <TouchableOpacity
+                          onPress={() => setActiveCategory(cat)}
+                          key={cat}
+                          className="bg-blue-200 p-4 px-4 rounded-full mr-2">
+                          <Text>{cat}</Text>
+                        </TouchableOpacity>
+                      );
+                    }
+                  })}
+                </ScrollView>
               </View>
-
-              <View style={styles.card}>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Start Km</Text>
-                  <TextInput
-                    value={startKm}
-                    keyboardType="numeric"
-                    onChangeText={setStartkm}
-                    placeholder="Enter Km"
-                    style={styles.textInput}
-                  />
-                </View>
-              </View>
-              <View style={styles.line}></View>
-              <View style={[styles.card, {marginTop: 5}]}>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>End Km</Text>
-                  <TextInput
-                    value={endkm}
-                    onChangeText={setendKm}
-                    keyboardType="numeric"
-                    placeholder="Enter Km"
-                    style={styles.textInput}
-                  />
-                </View>
-              </View>
-
-              <View style={styles.line}></View>
-              <View style={[styles.card, {marginTop: 5}]}>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Fuel Cost In Rs</Text>
-                  <TextInput
-                    value={fuelcost}
-                    keyboardType="numeric"
-                    onChangeText={setfuelcost}
-                    placeholder="Enter Cost of Fuel"
-                    style={styles.textInput}
-                  />
-                </View>
-              </View>
-              <View style={styles.line}></View>
-              <View style={[styles.card, {marginTop: 5}]}>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Starting Fuel Reading</Text>
-                  <TextInput
-                    value={startFuel}
-                    keyboardType="numeric"
-                    onChangeText={setStartFuel}
-                    placeholder="Enter Start Fuel Reading"
-                    style={styles.textInput}
-                  />
-                </View>
-              </View>
-              <View style={styles.line}></View>
-              <View style={[styles.card, {marginTop: 5}]}>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>End Fuel Reading</Text>
-                  <TextInput
-                    value={endFuel}
-                    keyboardType="numeric"
-                    onChangeText={setEndFuel}
-                    placeholder="Enter End Fuel Reading"
-                    style={styles.textInput}
-                  />
-                </View>
-              </View>
-
-              {/**<View style={styles.card}>
-                <View style={styles.section}>
-                  <Text style={styles.sectionTitle}>Send OTP</Text>
-                  <Text style={styles.sectionText}>
-                    Please Select Any One of the Source to send OTP
-                  </Text>
-                  <View
-                    style={{
-                      flexDirection: 'column',
-                      flex: 1,
-                      borderWidth: 2,
-                    }}>
-                    <View
-                      style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        backgroundColor: 'gray',
-                        alignItems: 'center',
-                        justifyContent: 'space-evenly',
-                        height: 50,
-                      }}>
-                      <Icon name="whatsapp" size={30} color={'#FFFF00'} />
-                      <Text style={[styles.text, {color: '#FFFFFF'}]}>
-                        Send code on Whatsapp
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        backgroundColor: 'white',
-                        alignItems: 'center',
-                        justifyContent: 'space-evenly',
-                        height: 50,
-                      }}>
-                      <Icon1 name="message" size={30} color={'#000000'} />
-                      <Text style={[styles.text, {color: '#000000'}]}>
-                        Send code on Message
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View> **/}
             </View>
-          )}
-        </View>
-      </ScrollView>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={() => navigate.goBack()}
-          style={[styles.button, styles.noShowButton]}>
-          <Text style={styles.buttonText}>{accept ? 'reject' : 'dismiss'}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => afteraccept()}
-          style={[styles.button, styles.startButton]}>
-          <Text style={styles.buttonText}>{accept ? 'Finish' : 'start'}</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+            <View className="mt-3 space-y-4">
+              <Text
+                style={{color: storeColors.text}}
+                className="ml-4 text-lg font-bold">
+                Featured Games
+              </Text>
+              <View className="pl-4">
+                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                  {featured.map((item, index) => {
+                    return <GameCard key={index} game={item} />;
+                  })}
+                </ScrollView>
+              </View>
+            </View>
+            <View className="mt-3">
+              <View className="flex-row justify-between items-center mb-2">
+                <Text
+                  style={{color: storeColors.text}}
+                  className="ml-5 text-lg font-bold">
+                  Top Action Games
+                </Text>
+                <TouchableOpacity className="mr-4">
+                  <Text className="text-blue-600 font-bold">See All</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={{height: 320}} showsVerticalScrollIndicator={false}>
+                {games.map((game, index) => {
+                  let bg =
+                    game.id == selectedGame
+                      ? 'rgba(255,255,255,0.4)'
+                      : 'transparent';
+                  return (
+                    <TouchableOpacity
+                      style={{backgroundColor: bg}}
+                      key={index}
+                      className="mx-4 p-2 mb-2 flex-row rounded-3xl"
+                      onPress={() => {
+                        setSelectedGame(game.id);
+                      }}>
+                      <Image
+                        source={game.image}
+                        style={{width: 80, height: 80}}
+                        className="rounded-2xl"
+                      />
+                      <View className="flex-1 flex justify-center pl-3 space-y-3">
+                        <Text
+                          style={{color: storeColors.text}}
+                          className="font-semibold">
+                          {game.title}
+                        </Text>
+                        <View className="flex-row space-x-3">
+                          <View className="flex-row space-x-1">
+                            <Image
+                              className="h-4 w-4 opacity-80"
+                              source={require('../assets/images/fullStar.png')}
+                            />
+                            <Text className="text-xs text-gray-700">
+                              {game.stars} stars
+                            </Text>
+                          </View>
+                          <View className="flex-row space-x-1">
+                            <ArrowDownTrayIcon
+                              size="15"
+                              className="text-red-500"
+                              style={{color: 'blue'}}
+                            />
+                            <Text className="text-xs text-gray-700">
+                              {game.downloads}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                      <View className="flex justify-center items-center">
+                        <GradientButton value="play" buttonClass="py-2 px-5" />
+                      </View>
+                    </TouchableOpacity>
+                  );
+                })}
+              </View>
+            </View>
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-    backgroundColor: '#FFFF',
-  },
   container: {
     flex: 1,
-  },
-  cardContainer: {
-    padding: 20,
-  },
-  card: {
-    backgroundColor: '#f0f0f0',
-    borderRadius: 10,
-    padding: 20,
-    shadowColor: '#000000',
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
-    padding: 12,
-    backgroundColor: '#D3D3D3',
-    borderRadius: 10,
-    marginHorizontal: 10,
   },
-  headerTextContainer: {
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-  },
-  headerText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  headerIconContainer: {
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  section: {
-    
-    
-  },
-  sectionRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems:'center'
-    
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#000000',
-    marginVertical:5
-  },
-  sectionText: {
-    fontSize: 14,
-    
-    color: '#000000',
-  },
-  sectionIconContainer: {
-    justifyContent: 'center',
-    marginRight: 12,
-    marginTop: 18,
-  },
-  line: {
-    height: 1,
-    backgroundColor: '#000000',
-    marginVertical: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly',
-    padding: 5,
-    marginBottom: 30,
-    backgroundColor: '#F5FFFA',
-  },
-  button: {
-    width: 100,
-    height: 40,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  noShowButton: {
-    backgroundColor: '#FF0000',
-  },
-  startButton: {
-    backgroundColor: '#0000FF',
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    alignSelf: 'center',
-  },
-  textInput: {
-    borderColor: 'black',
-    borderWidth: 1,
-    borderRadius: 10,
-    padding: 8,
-    margin: 5,
+  text: {
+    fontSize: 20,
   },
 });
-
-export default Home;
