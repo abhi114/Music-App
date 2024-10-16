@@ -2,15 +2,17 @@ import {View, Image, Text} from 'react-native';
 import React from 'react';
 import { PlusIcon, StarIcon } from 'react-native-heroicons/solid';
 import { TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const CoffeeCard = ({item}) => {
+  const navigation = useNavigation();
   return (
     <View
       style={{
         borderRadius: 40,
         backgroundColor: '#824C1B',
         height: 350,
-        width: 250,
+        width: 270,
         overflow: 'visible', // Ensures the image can overflow outside
         elevation:20
       }}
@@ -58,6 +60,7 @@ const CoffeeCard = ({item}) => {
           className="flex-row justify-between items-center ">
           <Text className="text-white font-bold text-lg ">$ {item.price}</Text>
           <TouchableOpacity
+            onPress={()=>navigation.navigate("ProductScreen",{...item})}
             style={{
               shadowColor: 'black',
               shadowRadius: 40,

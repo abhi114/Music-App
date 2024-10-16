@@ -8,17 +8,28 @@ import { PlusIcon, StarIcon } from 'react-native-heroicons/solid';
 
 import {HomeIcon as HomeOutline,HeartIcon as HeartOutline,ShoppingBagIcon as BagOutline} from 'react-native-heroicons/outline'
 import {HomeIcon as HomeSolid,HeartIcon as HeartSolid,ShoppingBagIcon as BagSolid} from 'react-native-heroicons/solid'
+import ProductScreen from '../component/CoffeeComponent/ProductScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const AppNavigation = () => {
   return (
     <NavigationContainer>
-        <Stack.Navigator screenOptions={{contentStyle:{backgroundColor:'white'}}}>
-            <Stack.Screen name='CoffeeHome' options={{headerShown:false}} component={HomeTabs}/>
-        </Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{contentStyle: {backgroundColor: 'white'}}}>
+        <Stack.Screen
+          name="CoffeeHome"
+          options={{headerShown: false}}
+          component={HomeTabs}
+        />
+        <Stack.Screen
+          name="ProductScreen"
+          options={{headerShown: false}}
+          component={ProductScreen}
+        />
+      </Stack.Navigator>
     </NavigationContainer>
-  )
+  );
 }
 
 function HomeTabs(){
@@ -29,7 +40,7 @@ function HomeTabs(){
           tabBarShowLabel: false,
           tabBarIcon:({focused,color,size})=>menuIcons(route,focused),
           tabBarStyle: {
-            height:55,
+            height:65,
             marginBottom: 10,
             borderRadius: 50,
             backgroundColor: '#96724D',
