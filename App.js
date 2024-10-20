@@ -5,10 +5,12 @@ import CoffeeHomePage from './component/CoffeeComponent/CoffeeHomePage'
 import AppNavigation from './navigation/AppNavigation'
 import PrHome from './component/PerplexityScroll/PrHome'
 import data from './component/PerplexityScroll/fakedata'
+import Parallax from './component/ParallaxCourosal/Parallax'
 const App = () => {
   return (
     <View style={{flex:1}}>
-      <PrHome data={data}/>
+      {/* <PrHome data={data}/> */}
+      <Parallax/>
     </View>
   );
 }
