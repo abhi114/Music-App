@@ -6,11 +6,16 @@ import AppNavigation from './navigation/AppNavigation'
 import PrHome from './component/PerplexityScroll/PrHome'
 import data from './component/PerplexityScroll/fakedata'
 import Parallax from './component/ParallaxCourosal/Parallax'
+import SensorParallax from './component/SensorParallax/SensorParallax'
 const App = () => {
   return (
     <View style={{flex:1}}>
-      {/* <PrHome data={data}/> */}
-      <Parallax/>
+      {/* <PrHome data={data}/>  */}
+    {/* <Parallax/>  */}
+    {/* <AppNavigation>
+      </AppNavigation> */}
+    <SensorParallax/>
+    
     </View>
   );
 }

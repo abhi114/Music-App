@@ -38,71 +38,85 @@ export default function Parallax() {
     const scrollX = React.useRef(new Animated.Value(0)).current;
   return (
     <View style={styles.container}>
+     
       <Animated.FlatList
         data={data}
         keyExtractor={item => item.key}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled={true}
-        onScroll={Animated.event([{nativeEvent:{contentOffset:{x:scrollX}}}],{useNativeDriver:true})}
+        onScroll={Animated.event(
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: true},
+        )}
         renderItem={({item, index}) => {
-            const inputRange = [(index-1)*width,index*width,(index+1)*width];
-            const translateX = scrollX.interpolate({
-                inputRange,outputRange:[-width*.7,0,width*.7]
-            })
-          return <View
-            style={{
-              width: width,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+          const inputRange = [
+            (index - 1) * width,
+            index * width,
+            (index + 1) * width,
+          ];
+          const translateX = scrollX.interpolate({
+            inputRange,
+            outputRange: [-width * 0.7, 0, width * 0.7],
+          });
+          return (
             <View
               style={{
-                borderRadius: 18,
-
-                elevation: 5, // This adds the shadow effect on Android
-                shadowColor: '#000',
-                shadowOffset: {width: 0, height: 0}, // iOS shadow properties
-                shadowOpacity: 1,
-                shadowRadius: 20,
-                padding: 12,
-                backgroundColor: '#fff',
+                width: width,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}>
+              <Image
+                source={{uri: item.photo}}
+                style={[StyleSheet.absoluteFillObject, {borderRadius: 12}]}
+                blurRadius={50}
+              />
               <View
                 style={{
-                  width: ITEM_WIDTH,
-                  height: ITEM_HEIGHT,
-                  overflow: 'hidden',
-                  borderRadius: 14,
+                  borderRadius: 18,
+
+                  elevation: 5, // This adds the shadow effect on Android
+                  shadowColor: '#000',
+                  shadowOffset: {width: 0, height: 0}, // iOS shadow properties
+                  shadowOpacity: 1,
+                  shadowRadius: 20,
+                  padding: 12,
+                  backgroundColor: '#fff',
                 }}>
-                <Animated.Image
-                  source={{uri: item.photo}}
+                <View
                   style={{
                     width: ITEM_WIDTH,
                     height: ITEM_HEIGHT,
-                    resizeMode: 'cover',
-                    alignItems: 'center',
-                    transform:[
-                        {translateX,}
-                    ]
+                    overflow: 'hidden',
+                    borderRadius: 14,
+                  }}>
+                  <Animated.Image
+                    source={{uri: item.photo}}
+                    style={{
+                      width: ITEM_WIDTH,
+                      height: ITEM_HEIGHT,
+                      resizeMode: 'cover',
+                      alignItems: 'center',
+                      transform: [{translateX}],
+                    }}
+                  />
+                </View>
+                <Image
+                  source={{uri: item.avatar_url}}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: 60,
+                    borderWidth: 5,
+                    borderColor: 'white',
+                    position: 'absolute',
+                    bottom: -30,
+                    right: 60,
                   }}
                 />
               </View>
-              <Image
-                source={{uri: item.avatar_url}}
-                style={{
-                  width: 60,
-                  height: 60,
-                  borderRadius: 60,
-                  borderWidth: 5,
-                  borderColor: 'white',
-                  position: 'absolute',
-                  bottom: -30,
-                  right:60,
-                }}
-              />
             </View>
-          </View>
+          );
         }}
       />
     </View>
