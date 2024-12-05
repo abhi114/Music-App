@@ -4,6 +4,8 @@ import { BottomTabBarProps } from '@react-navigation/bottom-tabs'
 import { BOTTOM_TAB_HEIGHT, Colors } from '../../utils/Constants'
 import Animated from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import ScalePress from '../../components/ui/ScalePress'
+import { HomeTabIcon, LibraryTabIcon, SearchTabIcon } from './TabIcons'
 
 const CustomTabBar:FC<BottomTabBarProps> = (props) => {
     const {state,navigation} = props
@@ -30,7 +32,11 @@ const CustomTabBar:FC<BottomTabBarProps> = (props) => {
                 })
             }
             return(
-                    
+                    <ScalePress key={index} style={styles.tabItem} onLongPress={onLongPress} onPress={onPress}>
+                            {route?.name === "Home" && <HomeTabIcon focused={isFocused}/>}
+                            {route?.name === "Search" && <SearchTabIcon focused={isFocused}/>}
+                            {route?.name === "Library" && <LibraryTabIcon focused={isFocused}/>}
+                    </ScalePress>
             )
         })
       }
@@ -44,10 +50,15 @@ const styles = StyleSheet.create({
         position:'absolute',
         height:BOTTOM_TAB_HEIGHT,
         bottom:0,
-        paddingTop:10,
+        paddingTop:5,
         zIndex:5,
         alignItems:'center',
-        justifyContent:'space-around'
+        justifyContent:'space-around',
+        flexDirection:'row'
+    },
+    tabItem:{
+        justifyContent:'center',
+        alignItems:'center'
     }
 })
 export default CustomTabBar
