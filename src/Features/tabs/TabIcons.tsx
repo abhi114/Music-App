@@ -7,9 +7,10 @@ import Home from '../../assets/icons/home.png'
 import Search from '../../assets/icons/search.png'
 import Library from '../../assets/icons/library.png'
 import { Image, ImageStyle, TextStyle, View, ViewStyle } from 'react-native'
-import { Colors } from '../../utils/Constants';
+import { Colors, Fonts } from '../../utils/Constants';
 import { fontR } from '../../utils/Scaling';
 import { FC } from 'react';
+import CustomText from '../../components/ui/CustomText';
 
 interface TabProps{
     name:string;
@@ -47,7 +48,7 @@ const TabIcon:FC<TabProps>=({name})=>{
     return(
         <View style={tabStyles}>
              <Image source={name==='Home'?Home:name==="Search"?Search:Library} style={[styles]}/>
-             
+             <CustomText  style={textStyleInactive}>{name}</CustomText>
         </View>
     )
 }
@@ -56,7 +57,7 @@ const TabIconFocused:FC<TabProps>=({name})=>{
     return(
         <View style={tabStyles}>
              <Image source={name==='Home'?HomeFocused:name==="Search"?SearchFocused:LibraryFocused} style={[styles]}/>
-             
+             <CustomText  style={textStyleActive}>{name}</CustomText>
         </View>
     )
 }
