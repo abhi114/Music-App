@@ -4,6 +4,7 @@ import HomeScreen from "../home/HomeScreen";
 import SearchScreen from "../search/SearchScreen";
 import LibraryScreen from "../library/LibraryScreen";
 import CustomTabBar from "./CustomTabBar";
+import React from "react";
 
 const Tab = createBottomTabNavigator()
 

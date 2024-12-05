@@ -1,12 +1,15 @@
 import { View, Text } from 'react-native'
 import React from 'react'
+import CustomSafeAreaView from '../../components/ui/CustomSafeAreaView'
 
 const HomeScreen = () => {
   return (
-    <View>
+    <CustomSafeAreaView>
       <Text>HomeScreen</Text>
-    </View>
+    </CustomSafeAreaView>
+    
   )
 }
+
 
 export default HomeScreen

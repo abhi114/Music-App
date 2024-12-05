@@ -11,6 +11,7 @@ import { Colors, Fonts } from '../../utils/Constants';
 import { fontR } from '../../utils/Scaling';
 import { FC } from 'react';
 import CustomText from '../../components/ui/CustomText';
+import React from 'react';
 
 interface TabProps{
     name:string;

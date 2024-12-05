@@ -10,7 +10,7 @@ interface Props{
     style?: TextStyle|TextStyle[];
     children:React.ReactNode;
     numberOfLines?:number;
-    onLayout:(event:any)=>void
+    onLayout?:(event:any)=>void
 }
 const CustomText:React.FC<Props>=({variant,fontFamily="Satoshi-Regular",fontSize,style,children,numberOfLines,onLayout,...props})=>{
 
