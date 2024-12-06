@@ -52,6 +52,7 @@ const withPlayer = <P extends object>(
             translationY.value = Math.max(Math.min(event.translationY + (isExpanded.value ? -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT:0),0),-MAX_PLAYER_HEIGHT+MIN_PLAYER_HEIGHT)
         })
         .onEnd((event)=>{
+            //console.log(event?.translationY)
             if(event?.translationY<-MIN_PLAYER_HEIGHT/2){ //it means user want to open full player
                 isExpanded.value= true;
                 translationY.value = withTiming(-MAX_PLAYER_HEIGHT+MIN_PLAYER_HEIGHT,{duration:300})
