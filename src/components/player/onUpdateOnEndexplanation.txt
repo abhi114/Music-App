@@ -1,0 +1,128 @@
+Detailed Explanation: onUpdate and onEnd
+The onUpdate and onEnd functions in the panGesture define how the vertical drag gesture interacts with the player. They ensure smooth animations and proper transitions between the collapsed and expanded states.
+
+1. onUpdate
+Code:
+
+tsx
+Copy code
+.onUpdate((event) => {
+    translationY.value = Math.max(
+        Math.min(
+            event.translationY + (isExpanded.value ? -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT : 0),
+            0
+        ),
+        -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT
+    );
+});
+Purpose:
+Tracks the user’s drag movement and updates the position (translationY.value) of the player in real time.
+
+event.translationY: The amount the user has dragged the player vertically. Positive values represent downward motion, and negative values represent upward motion.
+isExpanded.value: Checks if the player is already expanded. If it is:
+Adds an offset (-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT) to adjust the starting position.
+Math.min and Math.max:
+Restrict translationY to a range between fully collapsed (0) and fully expanded (-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT).
+Example:
+
+Suppose:
+
+MAX_PLAYER_HEIGHT = 600
+MIN_PLAYER_HEIGHT = 100
+The player is collapsed (isExpanded.value = false).
+If the user drags up by -200px (event.translationY = -200):
+
+Calculation:
+tsx
+Copy code
+translationY.value = Math.max(
+    Math.min(-200, 0),
+    -500 // -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT
+);
+Result: translationY.value = -200.
+If the user drags up further to -800px:
+
+Calculation clamps the value:
+tsx
+Copy code
+translationY.value = Math.max(-500, -800);
+Result: translationY.value = -500 (player is fully expanded).
+2. onEnd
+Code:
+
+tsx
+Copy code
+.onEnd((event) => {
+    if (event?.translationY < -MIN_PLAYER_HEIGHT / 2) { 
+        isExpanded.value = true;
+        translationY.value = withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 300 });
+    } else {
+        isExpanded.value = false;
+        translationY.value = withTiming(0, { duration: 300 });
+    }
+});
+Purpose:
+Determines whether the player should snap to the collapsed or expanded state after the drag ends.
+
+event.translationY: The total distance the user has dragged when the gesture ends.
+
+Condition:
+
+If the drag surpasses a threshold (-MIN_PLAYER_HEIGHT / 2), the player expands.
+Otherwise, it snaps back to the collapsed state.
+withTiming: Smoothly animates the transition to the target position.
+
+Example:
+
+Suppose:
+MIN_PLAYER_HEIGHT = 100.
+User drags:
+If event.translationY = -60 (drag is less than half the threshold):
+tsx
+Copy code
+isExpanded.value = false;
+translationY.value = withTiming(0, { duration: 300 });
+The player collapses.
+If event.translationY = -80 (drag surpasses the threshold):
+tsx
+Copy code
+isExpanded.value = true;
+translationY.value = withTiming(-500, { duration: 300 });
+The player expands.
+3. interpolate in Styles
+Code:
+
+tsx
+Copy code
+const animatedContainerStyle = useAnimatedStyle(() => {
+    const height = interpolate(
+        translationY.value,
+        [-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, 0],
+        [MAX_PLAYER_HEIGHT, MIN_PLAYER_HEIGHT],
+        "clamp"
+    );
+    return { height };
+});
+Purpose:
+Maps the translationY.value range to a corresponding height range for the container.
+
+interpolate Parameters:
+Input range: [-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, 0]
+(The range of translationY.value).
+Output range: [MAX_PLAYER_HEIGHT, MIN_PLAYER_HEIGHT]
+(The corresponding container heights).
+Mode: "clamp" ensures that values outside the range are restricted to the bounds.
+Example:
+
+Suppose:
+translationY.value = -250 (partially expanded).
+Input range: [-500, 0].
+Output range: [600, 100].
+Interpolation:
+height = (translationY.value + 500) / 500 * (600 - 100) + 100.
+height = (250 / 500) * 500 + 100 = 350.
+Summary
+onUpdate: Dynamically tracks and adjusts the player's position based on the user's drag. It ensures the position stays within bounds.
+onEnd: Finalizes the player's state (expanded or collapsed) based on the drag distance. Animates the player to the respective position.
+interpolate: Converts the player's position into dynamic style properties (e.g., height, opacity).
+Together, these mechanisms create a seamless, intuitive user experience for transitioning between the collapsed and expanded states.
