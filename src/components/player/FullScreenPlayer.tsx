@@ -1,12 +1,22 @@
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import React from 'react'
+import { Colors } from '../../utils/Constants'
+import { screenHeight, screenWidth } from '../../utils/Scaling'
 
 const FullScreenPlayer = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <Text>FullScreenPlayer</Text>
     </View>
   )
 }
+
+const styles= StyleSheet.create({
+  container:{
+    width:screenWidth,
+    height:screenHeight,
+    backgroundColor:Colors.backgroundDark
+  }
+})
 
 export default FullScreenPlayer

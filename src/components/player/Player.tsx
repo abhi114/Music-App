@@ -4,7 +4,7 @@ import { screenHeight } from "../../utils/Scaling";
 import { Platform, StyleSheet, View } from "react-native";
 import CustomText from "../ui/CustomText";
 import {Gesture, GestureDetector, ScrollView} from 'react-native-gesture-handler'
-import Animated, { useAnimatedScrollHandler, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useSharedState } from "../../Features/tabs/SharedContext";
 import FullScreenPlayer from "./FullScreenPlayer";
 import AirPlayer from "./AirPlayer";
@@ -60,12 +60,36 @@ const withPlayer = <P extends object>(
                 translationY.value = withTiming(0,{duration:300})
             }
         }).enabled(!isScroll.value)
+         const animatedContainerStyle = useAnimatedStyle(()=>{
+            const height = interpolate(translationY.value,[-MAX_PLAYER_HEIGHT+MIN_PLAYER_HEIGHT,0],[MAX_PLAYER_HEIGHT,MIN_PLAYER_HEIGHT],"clamp")
+            return{
+                height,
+                borderTopLeftRadius:translationY.value <-2 ? 15:0,
+                borderTopRightRadius:translationY.value<-2 ?15:0,
+
+            }
+         })
+         const collapsedOpacityStyle = useAnimatedStyle(()=>{
+            const opacity = interpolate(translationY.value,[-2,0],[0,1],"clamp")
+            return {
+                opacity,
+                display:translationY.value <-2 ?'none':'flex'
+            }
+         })
+         const expandedOpacityStyle = useAnimatedStyle(()=>{
+             const opacity = interpolate(translationY.value,[-2,0],[1,0],"clamp")
+            return {
+                opacity,
+                display:translationY.value >-2 ?'none':'flex'
+            }
+         })
+         const combinedGesture = Gesture.Simultaneous(panGesture,Gesture.Native())
         // expanded opacity style is a react native animated style that will change with the animation
         return (
             <View style={styles.container}>
                 <WrappedComponent {...props}/>
-                <GestureDetector>
-                    <Animated.View>
+                <GestureDetector gesture={combinedGesture}>
+                    <Animated.View style={ [styles.playerContainer,animatedContainerStyle]}>
                         {Platform.OS === 'ios'?
                         <Animated.ScrollView persistentScrollbar
                         ref={scrollRef}
@@ -111,10 +135,9 @@ const styles = StyleSheet.create({
     playerContainer:{
         position:'absolute',
         width:'100%',
-        bottom:0,
         zIndex:1,
         overflow:'hidden',
-        backgroundColor:'transparent',
+        bottom:0
     },
     collapsedPlayer:{
         justifyContent:'center',
