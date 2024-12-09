@@ -41,26 +41,43 @@ const withPlayer = <P extends object>(
                 }
             }
         })
-        const panGesture = Gesture.Pan()
-        .onChange(()=>{
-            if(translationY.value <= -602){
-                isScroll.value=true
-            }
+       const panGesture = Gesture.Pan()
+    .onChange(() => {
+        if (translationY.value <= -602) {
+            isScroll.value = true;
+        }
+    })
+    .onUpdate((event) => {
+        // Dynamically update translationY to follow drag direction
+        const newTranslationY = event.translationY + (isExpanded.value ? -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT : 0);
 
-        })
-        .onUpdate((event)=>{
-            translationY.value = Math.max(Math.min(event.translationY + (isExpanded.value ? -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT:0),0),-MAX_PLAYER_HEIGHT+MIN_PLAYER_HEIGHT)
-        })
-        .onEnd((event)=>{
-            //console.log(event?.translationY)
-            if(event?.translationY<-MIN_PLAYER_HEIGHT/2){ //it means user want to open full player
-                isExpanded.value= true;
-                translationY.value = withTiming(-MAX_PLAYER_HEIGHT+MIN_PLAYER_HEIGHT,{duration:300})
-            }else{
-                isExpanded.value = false;
-                translationY.value = withTiming(0,{duration:300})
-            }
-        }).enabled(!isScroll.value)
+        // Allow the player to move freely within its boundaries
+        translationY.value = Math.max(
+            Math.min(newTranslationY, 0), 
+            -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT
+        );
+    })
+    .onEnd((event) => {
+        // Decide the final state based on the end position
+        const finalTranslationY = event.translationY + (isExpanded.value ? -MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT : 0);
+        //console.log(finalTranslationY + " asda  " +  -MIN_PLAYER_HEIGHT + "asdasdasd " + -screenHeight/2);
+        if (isExpanded.value ==false && finalTranslationY < -MIN_PLAYER_HEIGHT -30) {
+            // Open the full-screen player
+            isExpanded.value = true;
+            translationY.value = withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 300 });
+        } else if( isExpanded.value ==true && finalTranslationY < ((-screenHeight/2)-90)) {
+            // Collapse to minimized player
+            isExpanded.value = true;
+            translationY.value =  withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 300 });
+        }else{
+            // Collapse to minimized player
+            isExpanded.value = false;
+            translationY.value = withTiming(0, { duration: 300 });
+        }
+    })
+    .enabled(!isScroll.value);
+
+
          const animatedContainerStyle = useAnimatedStyle(()=>{
             const height = interpolate(translationY.value,[-MAX_PLAYER_HEIGHT+MIN_PLAYER_HEIGHT,0],[MAX_PLAYER_HEIGHT,MIN_PLAYER_HEIGHT],"clamp")
             return{

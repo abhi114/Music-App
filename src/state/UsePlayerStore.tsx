@@ -20,14 +20,14 @@ interface PlayerStore{
     isShuffling:boolean;
     clear:()=>void;
     isRepeating:boolean;
-    setCurrentPlayingTrack:(track:Track)=>Promise<void>;
+    //setCurrentPlayingTrack:(track:Track)=>Promise<void>;
     setCurrentTrack:(track:Track)=>Promise<void>;
-    play:()=>Promise<void>;
-    pause:()=>Promise<void>;
-    next:()=>Promise<void>;
-    previous:()=>Promise<void>;
-    toggleShuffle:()=>Promise<void>;
-    toggleRepeat:()=>Promise<void>;
+    // play:()=>Promise<void>;
+    // pause:()=>Promise<void>;
+    // next:()=>Promise<void>;
+    // previous:()=>Promise<void>;
+    // toggleShuffle:()=>Promise<void>;
+    // toggleRepeat:()=>Promise<void>;
 
 }
 
@@ -41,6 +41,9 @@ export const usePlayerStore =create<PlayerStore>()(
                 isRepeating:false,
                 clear:()=>{
                     set({currentPlayingTrack:null})
+                },
+                setCurrentTrack: async (track:Track)=>{
+                    set({currentPlayingTrack:track})
                 }
         }),
         {
