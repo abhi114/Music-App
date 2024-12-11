@@ -39,7 +39,7 @@ const CustomText:React.FC<Props>=({variant,fontFamily="Satoshi-Regular",fontSize
            break;
     }
     return (
-        <Text onLayout={onLayout} style={[styles.text,{color:Colors.text,fontSize:computerFontSize},{fontFamily},style]}>
+        <Text numberOfLines={numberOfLines!==undefined?numberOfLines:undefined} onLayout={onLayout} style={[styles.text,{color:Colors.text,fontSize:computerFontSize},{fontFamily},style]} {...props}>
         {children}
         </Text>
     )
