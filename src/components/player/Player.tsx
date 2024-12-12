@@ -8,6 +8,7 @@ import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useS
 import { useSharedState } from "../../Features/tabs/SharedContext";
 import FullScreenPlayer from "./FullScreenPlayer";
 import AirPlayer from "./AirPlayer";
+import { usePlayerStore } from "../../state/UsePlayerStore";
 const MIN_PLAYER_HEIGHT = BOTTOM_TAB_HEIGHT + 60;
 const MAX_PLAYER_HEIGHT = screenHeight;
 
@@ -18,6 +19,7 @@ const withPlayer = <P extends object>(
         const {translationY} = useSharedState();
         const isExpanded = useSharedValue(false);
         const isScroll = useSharedValue(false);
+        const {currentPlayingTrack}= usePlayerStore();
         const scrollRef = useRef<Animated.ScrollView>(null)
         useEffect(()=>{
             translationY.value = withTiming(0,{duration:0}) //it means that full screen player should be minimized on app start
@@ -106,6 +108,7 @@ const withPlayer = <P extends object>(
         return (
             <View style={styles.container}>
                 <WrappedComponent {...props}/>
+                {currentPlayingTrack &&(
                 <GestureDetector gesture={combinedGesture}>
                     <Animated.View style={ [styles.playerContainer,animatedContainerStyle]}>
                         {Platform.OS === 'ios'?
@@ -137,6 +140,7 @@ const withPlayer = <P extends object>(
                         </Animated.View>
                     </Animated.View>
                 </GestureDetector>
+                )}
             </View>
         )
     }

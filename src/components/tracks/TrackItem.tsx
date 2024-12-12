@@ -6,6 +6,7 @@ import { resetAndNavigate } from '../../utils/NavigationUtils';
 import CustomText from '../ui/CustomText';
 import { fontR } from '../../utils/Scaling';
 import Icon from '../ui/Icon';
+import SlidingText from '../ui/SlidingText';
 interface TrackItemProps {
     item:any;
     onNavigate?:boolean;
@@ -30,7 +31,9 @@ const TrackItem:FC<TrackItemProps> = ({item,onNavigate}) => {
             <View style={styles.flexRow}>
                     <Image source={item?.artwork_uri} style={styles.img}/>
                     <View style={styles.trackInfo}>
-                        <CustomText numberOfLines={1} fontSize={fontR(9)} fontFamily={Fonts.Medium} style={{color:isActive?Colors.primary:Colors.text}}>{item.title}</CustomText>
+                        {currentPlayingTrack?.title === item?.title?
+                        <SlidingText fontFamily={Fonts.Bold} fontSize={fontR(8)} text={currentPlayingTrack?.title}/>
+                        :<CustomText numberOfLines={1} fontSize={fontR(9)} fontFamily={Fonts.Medium} style={{color:isActive?Colors.primary:Colors.text}}>{item.title}</CustomText>}
                         <CustomText numberOfLines={1} fontSize={fontR(8)}>
                             {item?.artist?.name}
                         </CustomText>
