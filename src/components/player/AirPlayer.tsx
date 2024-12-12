@@ -67,6 +67,11 @@ const AirPlayer:FC = () => {
           </TouchableOpacity>
         </View>
       </View>
+      <View style={styles.progressContainer}>
+        <View style={styles.progressBackground}>
+          <View style={[styles.progressBar,{width:calculateProgressWidth()}]}/>
+        </View>
+      </View>
    </LinearGradient>
   )
 }
@@ -111,7 +116,7 @@ const styles = StyleSheet.create({
     },
     progressBar:{
       height:3,
-      backgroundColor:'#fff'
+      backgroundColor:'#FF0000'
     }
 })
 export default AirPlayer
