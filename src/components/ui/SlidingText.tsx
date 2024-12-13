@@ -9,7 +9,7 @@ interface SlidingTextProps {
     fontFamily: string;
 }
 
-const SlidingText: FC<SlidingTextProps> = ({ text, fontSize, fontFamily, }) => {
+const SlidingText: FC<SlidingTextProps> = ({ text, fontSize, fontFamily,style }) => {
     const [textWidth, setTextWidth] = useState<number>(0);
     const containerWidth = Dimensions.get('window').width - 190;
     const translateX = useSharedValue(0);
@@ -51,7 +51,7 @@ const SlidingText: FC<SlidingTextProps> = ({ text, fontSize, fontFamily, }) => {
                 
                  // Attach directly here
             >
-                <CustomText fontSize={fontSize} onLayout={handleTextLayout} numberOfLines={1}  fontFamily={fontFamily}>
+                <CustomText fontSize={fontSize} onLayout={handleTextLayout} numberOfLines={1}  fontFamily={fontFamily} style={style}>
                     {text}
                 </CustomText>
             </Animated.View>

@@ -32,7 +32,7 @@ const TrackItem:FC<TrackItemProps> = ({item,onNavigate}) => {
                     <Image source={item?.artwork_uri} style={styles.img}/>
                     <View style={styles.trackInfo}>
                         {currentPlayingTrack?.title === item?.title?
-                        <SlidingText fontFamily={Fonts.Bold} fontSize={fontR(8)} text={currentPlayingTrack?.title}/>
+                        <SlidingText fontFamily={Fonts.Bold} fontSize={fontR(8)} text={currentPlayingTrack?.title} style={{color:isActive?Colors.primary:Colors.text}}/>
                         :<CustomText numberOfLines={1} fontSize={fontR(9)} fontFamily={Fonts.Medium} style={{color:isActive?Colors.primary:Colors.text}}>{item.title}</CustomText>}
                         <CustomText numberOfLines={1} fontSize={fontR(8)}>
                             {item?.artist?.name}

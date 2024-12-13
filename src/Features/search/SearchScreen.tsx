@@ -5,6 +5,7 @@ import CustomHeader from '../../components/ui/CustomHeader'
 import { fontR, screenHeight } from '../../utils/Scaling'
 import CustomText from '../../components/ui/CustomText'
 import Icon from '../../components/ui/Icon'
+import withPlayer from '../../components/player/Player'
 
 const SearchScreen = () => {
   return (
@@ -28,4 +29,4 @@ const styles = StyleSheet.create({
     alignItems:'center'
   }
 })
-export default SearchScreen
+export default withPlayer(SearchScreen)

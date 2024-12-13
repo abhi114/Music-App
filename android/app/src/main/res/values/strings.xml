@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Spotify 3.0</string>
+    <string name="app_name">AN Music</string>
     <string name="rntp_temporary_channel_id">temporary_channel</string>
     <string name="rntp_temporary_channel_name">temporary_channel</string>
     <string name="playback_channel_name">Spotify 3.0</string>

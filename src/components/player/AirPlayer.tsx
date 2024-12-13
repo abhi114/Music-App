@@ -61,10 +61,11 @@ const AirPlayer:FC = () => {
           </View>
         </TouchableOpacity>
         <View style={styles.flexRow}>
-          <Icon name='broadcast-on-home' iconFamily='MaterialIcons' color='#ccc' size={fontR(20)}/>
           <TouchableOpacity onPress={togglePlayback}>
             <Icon name={isPlaying? 'pause':'play-arrow'} iconFamily='MaterialIcons' size={fontR(22)} />
           </TouchableOpacity>
+          <Icon name='broadcast-on-home' iconFamily='MaterialIcons' color='#ccc' size={fontR(20)}/>
+          
         </View>
       </View>
       <View style={styles.progressContainer}>
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     },
     progressBar:{
       height:3,
-      backgroundColor:'#FF0000'
+      backgroundColor:'#fff'
     }
 })
 export default AirPlayer

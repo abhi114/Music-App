@@ -7,7 +7,7 @@ import { fontR } from '../../utils/Scaling'
 const CustomHeader:FC<{title:string}> = ({title}) => {
   return (
     <View style={styles.flexRow}>
-      <Image source={require('../../assets/images/logo_text.png')} style={styles.img}/>
+      <Image source={require('../../assets/images/logomain.png')} style={styles.img}/>
       <CustomText fontFamily={Fonts.Medium} fontSize={fontR(12)} style={styles.text}>{title}</CustomText>
     </View>
   )
