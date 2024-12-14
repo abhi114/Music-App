@@ -20,6 +20,7 @@ const withPlayer = <P extends object>(
         const isExpanded = useSharedValue(false);
         const isScroll = useSharedValue(false);
         const {currentPlayingTrack}= usePlayerStore();
+        console.log("is scroll value is"+ isScroll.value);
         const scrollRef = useRef<Animated.ScrollView>(null)
         useEffect(()=>{
             translationY.value = withTiming(0,{duration:0}) //it means that full screen player should be minimized on app start
@@ -45,7 +46,8 @@ const withPlayer = <P extends object>(
         })
        const panGesture = Gesture.Pan()
     .onChange(() => {
-        if (translationY.value <= -602) {
+        if (translationY.value <= -660) {
+            //console.log("changing here the value of is Scroll")
             isScroll.value = true;
         }
     })
