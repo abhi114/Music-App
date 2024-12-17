@@ -10,7 +10,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import Icon from '../ui/Icon'
 import CustomText from '../ui/CustomText'
 import VideoPlayer from './VideoPlayer'
-
+import Controls from './Controls'
 const FullScreenPlayer = () => {
    const [colors,setColors]= useState(['#666','#666']);
   const {collapsePlayer} = useSharedState()
@@ -47,6 +47,7 @@ const FullScreenPlayer = () => {
             <Icon name='ellipsis-horizontal-sharp' iconFamily='Ionicons' size={fontR(20)}/>
         </View>
         <View style={styles.albumContainer}/>
+        <Controls/>
     </View>
   )
 }
@@ -76,7 +77,7 @@ const styles= StyleSheet.create({
   },
   albumContainer:{
     width:'100%',
-    backgroundColor:Colors.background,
+    height:screenHeight * 0.52
 
   },
   imageContainer:{

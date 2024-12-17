@@ -121,6 +121,7 @@ const withPlayer = <P extends object>(
                         scrollEventThrottle={1}
                          onScroll={onScroll} 
                          contentContainerStyle={styles.expandedPlayer}
+                         
                          style={expandedOpacityStyle}> 
                             <FullScreenPlayer/>
                         </Animated.ScrollView>
