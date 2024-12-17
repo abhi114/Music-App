@@ -43,6 +43,13 @@ const Controls:FC = () => {
 const handleSeek = async(value:any)=>{
         await TrackPlayer.seekTo(value*progress?.duration)
 }
+const handleLooping = async ()=>{
+  if(isRepeating){
+    toggleShuffle()
+  }else{
+    toggleRepeat();
+  }
+}
 useEffect(() => {
   PackageIcon.getImageSource('circle',15,'white').then(setIcon)
 
@@ -71,6 +78,23 @@ useEffect(() => {
       <View style={styles.timeZone}>
         <CustomText fontSize={fontR(7)}>{formatTime(progress?.position)}</CustomText>
         <CustomText fontSize={fontR(7)}>{formatTime(progress?.duration - progress?.position)}</CustomText>
+      </View>
+      <View style={styles.flexRowBetween}>
+        <ScalePress onPress={handleLooping}>
+          <Icon name={isRepeating?'repeat':'shuffle'} iconFamily='Ionicons' color={Colors.primary} size={fontR(22)}/>
+        </ScalePress>
+        <ScalePress onPress={previous}>
+          <Icon name='play-skip-back-sharp' iconFamily='Ionicons'  size={fontR(26)}/>
+        </ScalePress>
+        <ScalePress onPress={togglePlayback}>
+          <Icon name={isPlaying?'pause-circle-sharp':'play-circle-sharp'} iconFamily='Ionicons'  size={fontR(40)}/>
+        </ScalePress>
+         <ScalePress onPress={next}>
+          <Icon name='play-skip-forward-sharp' iconFamily='Ionicons'  size={fontR(26)}/>
+        </ScalePress>
+         <ScalePress onPress={togglePlayback}>
+          <Icon name='alarm' iconFamily='MaterialCommunityIcons'  size={fontR(22)} color={Colors.primary}/>
+        </ScalePress>
       </View>
     </View>
   )
