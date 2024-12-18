@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Platform } from 'react-native'
+import { View, Text, StyleSheet, Platform, Image } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import TrackPlayer, { usePlaybackState, useProgress } from 'react-native-track-player';
 import { usePlayerStore } from '../../state/UsePlayerStore';
@@ -92,9 +92,12 @@ useEffect(() => {
          <ScalePress onPress={next}>
           <Icon name='play-skip-forward-sharp' iconFamily='Ionicons'  size={fontR(26)}/>
         </ScalePress>
-         <ScalePress onPress={togglePlayback}>
+         <ScalePress>
           <Icon name='alarm' iconFamily='MaterialCommunityIcons'  size={fontR(22)} color={Colors.primary}/>
         </ScalePress>
+      </View>
+      <View style={styles.artistContainer}>
+        <Image source={currentPlayingTrack?.artist?.cover_uri} style={styles.artistCover}/>
       </View>
     </View>
   )

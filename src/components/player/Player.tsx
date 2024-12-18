@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BOTTOM_TAB_HEIGHT } from "../../utils/Constants";
 import { screenHeight } from "../../utils/Scaling";
 import { Platform, StyleSheet, View } from "react-native";
 import CustomText from "../ui/CustomText";
 import {Gesture, GestureDetector, ScrollView} from 'react-native-gesture-handler'
-import Animated, { interpolate, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
+import Animated, { interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useSharedState } from "../../Features/tabs/SharedContext";
 import FullScreenPlayer from "./FullScreenPlayer";
 import AirPlayer from "./AirPlayer";
@@ -16,39 +16,68 @@ const withPlayer = <P extends object>(
     WrappedComponent:React.Component<P>
 ):React.FC<P>=>{
     const WithPlayer:React.FC<P>=(props)=>{
-        const {translationY} = useSharedState();
-        const isExpanded = useSharedValue(false);
-        const isScroll = useSharedValue(false);
+        const {translationY,isScroll,isExpanded,ScrollingEnabled,setScrollingEnabled,expanded,setExpanded} = useSharedState();
         const {currentPlayingTrack}= usePlayerStore();
         console.log("is scroll value is"+ isScroll.value);
         const scrollRef = useRef<Animated.ScrollView>(null)
+        const setIsScrollTrue = () => {
+                isScroll.value = true;
+                setScrollingEnabled(true);
+            };
+        const setIsScrollFalse = ()=>{
+                isScroll.value = false;
+                setScrollingEnabled(false);
+        }
+        const setIsExpandedTrue = ()=>{
+
+        }
         useEffect(()=>{
             translationY.value = withTiming(0,{duration:0}) //it means that full screen player should be minimized on app start
         },[translationY])
         // what we are doing here is that if the application is at the top most scroll then it cant scroll any further up and if the user is still trying to go up then let the gesture handler handle it
         // as it is most likely that user want to open full player screen
+        useEffect(() => {
+          console.log("scrolling is  " + ScrollingEnabled)
+          
+            
+          return () => {
+            
+          }
+        }, [isScroll.value])
+        useEffect(() => {
+          console.log("changing expanded value is " + isExpanded.value)
+        
+          return () => {
+            
+          }
+        }, [isExpanded.value])
+        
         const onScroll = useAnimatedScrollHandler({
             onBeginDrag({contentOffset}){
                 if(contentOffset.y === 0){
+                    console.log("at top")
                     isScroll.value=false
+                    //runOnJS(setIsScrollFalse)();
                 }
             },
             onEndDrag({contentOffset}){
                 if(contentOffset.y === 0){
                     isScroll.value=false
+                    //runOnJS(setIsScrollFalse)();
                 }
             },
             onMomentumEnd({contentOffset}){
                  if(contentOffset.y === 0){
                     isScroll.value=false
+                    //runOnJS(setIsScrollFalse)();
                 }
             }
         })
        const panGesture = Gesture.Pan()
     .onChange(() => {
-        if (translationY.value <= -660) {
-            //console.log("changing here the value of is Scroll")
-            isScroll.value = true;
+        if (translationY.value <= -602) {
+            console.log("changing here the value of is Scroll" + translationY.value)
+           runOnJS(setIsScrollTrue)();
         }
     })
     .onUpdate((event) => {
@@ -68,18 +97,25 @@ const withPlayer = <P extends object>(
         if (isExpanded.value ==false && finalTranslationY < -MIN_PLAYER_HEIGHT -30) {
             // Open the full-screen player
             isExpanded.value = true;
+             runOnJS(setIsScrollTrue)();
+            
+            console.log(1 +"" +  isScroll.value);
             translationY.value = withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 300 });
         } else if( isExpanded.value ==true && finalTranslationY < ((-screenHeight/2)-90)) {
             // Collapse to minimized player
             isExpanded.value = true;
+             runOnJS(setIsScrollTrue)();
+            console.log(2);
             translationY.value =  withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 300 });
         }else{
             // Collapse to minimized player
             isExpanded.value = false;
+            runOnJS(setIsScrollFalse)();
+            console.log(3);
             translationY.value = withTiming(0, { duration: 300 });
         }
     })
-    .enabled(!isScroll.value);
+    .enabled(!ScrollingEnabled);
 
 
          const animatedContainerStyle = useAnimatedStyle(()=>{
@@ -127,7 +163,7 @@ const withPlayer = <P extends object>(
                         </Animated.ScrollView>
                         :
                         <Animated.ScrollView style={expandedOpacityStyle}>
-                            <ScrollView 
+                          <ScrollView 
                             persistentScrollbar
                              bounces={false} 
                             pinchGestureEnabled 

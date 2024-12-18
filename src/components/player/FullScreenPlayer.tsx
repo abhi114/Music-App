@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Platform, TouchableOpacity, Image } from 'react-native'
+import { View, Text, StyleSheet, Platform, TouchableOpacity, Image, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Colors, darkenColor, Fonts } from '../../utils/Constants'
 import { fontR, screenHeight, screenWidth } from '../../utils/Scaling'
@@ -32,6 +32,7 @@ const FullScreenPlayer = () => {
     }
   }, [currentPlayingTrack])
   return (
+    
     <View style={styles.container}>
       {currentPlayingTrack?.video_uri ? <VideoPlayer video_uri={currentPlayingTrack?.video_uri}/>:
       <View style={styles.imageContainer}>
@@ -49,13 +50,14 @@ const FullScreenPlayer = () => {
         <View style={styles.albumContainer}/>
         <Controls/>
     </View>
+    
   )
 }
 
 const styles= StyleSheet.create({
   container:{
     width:'100%',
-    height:screenHeight,
+    
     backgroundColor:Colors.background
   },
   gradient:{
