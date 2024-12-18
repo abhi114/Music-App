@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { BOTTOM_TAB_HEIGHT } from "../../utils/Constants";
 import { screenHeight } from "../../utils/Scaling";
-import { Platform, StyleSheet, View } from "react-native";
+import { BackHandler, Platform, StyleSheet, View } from "react-native";
 import CustomText from "../ui/CustomText";
 import {Gesture, GestureDetector, ScrollView} from 'react-native-gesture-handler'
 import Animated, { interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
@@ -16,7 +16,7 @@ const withPlayer = <P extends object>(
     WrappedComponent:React.Component<P>
 ):React.FC<P>=>{
     const WithPlayer:React.FC<P>=(props)=>{
-        const {translationY,isScroll,isExpanded,ScrollingEnabled,setScrollingEnabled,expanded,setExpanded} = useSharedState();
+        const {translationY,isScroll,isExpanded,ScrollingEnabled,setScrollingEnabled,expanded,setExpanded,collapsePlayer} = useSharedState();
         const {currentPlayingTrack}= usePlayerStore();
         console.log("is scroll value is"+ isScroll.value);
         const scrollRef = useRef<Animated.ScrollView>(null)
@@ -31,26 +31,43 @@ const withPlayer = <P extends object>(
         const setIsExpandedTrue = ()=>{
 
         }
+    useEffect(() => {
+      const handleBackPress = () => {
+        collapsePlayer();
+        return true;
+      };
+
+      // Register the back button handler
+      if(ScrollingEnabled){
+      BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      
+      }
+
+      // Clean up the event listener when the component unmounts
+      return () => {
+        BackHandler.removeEventListener('hardwareBackPress', handleBackPress);
+      };
+    }, [ScrollingEnabled]);
         useEffect(()=>{
             translationY.value = withTiming(0,{duration:0}) //it means that full screen player should be minimized on app start
         },[translationY])
         // what we are doing here is that if the application is at the top most scroll then it cant scroll any further up and if the user is still trying to go up then let the gesture handler handle it
         // as it is most likely that user want to open full player screen
-        useEffect(() => {
-          console.log("scrolling is  " + ScrollingEnabled)
+        // useEffect(() => {
+        //   console.log("scrolling is  " + ScrollingEnabled)
           
             
-          return () => {
+        //   return () => {
             
-          }
-        }, [isScroll.value])
-        useEffect(() => {
-          console.log("changing expanded value is " + isExpanded.value)
+        //   }
+        // }, [isScroll.value])
+        // useEffect(() => {
+        //   console.log("changing expanded value is " + isExpanded.value)
         
-          return () => {
+        //   return () => {
             
-          }
-        }, [isExpanded.value])
+        //   }
+        // }, [isExpanded.value])
         
         const onScroll = useAnimatedScrollHandler({
             onBeginDrag({contentOffset}){
@@ -99,20 +116,20 @@ const withPlayer = <P extends object>(
             isExpanded.value = true;
              runOnJS(setIsScrollTrue)();
             
-            console.log(1 +"" +  isScroll.value);
-            translationY.value = withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 300 });
+           // console.log(1 +"" +  isScroll.value);
+            translationY.value = withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 200 });
         } else if( isExpanded.value ==true && finalTranslationY < ((-screenHeight/2)-90)) {
             // Collapse to minimized player
             isExpanded.value = true;
              runOnJS(setIsScrollTrue)();
-            console.log(2);
-            translationY.value =  withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 300 });
+            //console.log(2);
+            translationY.value =  withTiming(-MAX_PLAYER_HEIGHT + MIN_PLAYER_HEIGHT, { duration: 200 });
         }else{
             // Collapse to minimized player
             isExpanded.value = false;
             runOnJS(setIsScrollFalse)();
-            console.log(3);
-            translationY.value = withTiming(0, { duration: 300 });
+            //console.log(3);
+            translationY.value = withTiming(0, { duration: 200 });
         }
     })
     .enabled(!ScrollingEnabled);

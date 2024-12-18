@@ -98,6 +98,25 @@ useEffect(() => {
       </View>
       <View style={styles.artistContainer}>
         <Image source={currentPlayingTrack?.artist?.cover_uri} style={styles.artistCover}/>
+        <View style={{paddingHorizontal:20,paddingVertical:15}}>
+            <CustomText fontFamily={Fonts.Bold} fontSize={fontR(11)}>{currentPlayingTrack?.artist?.name}</CustomText>
+            <CustomText  fontFamily={Fonts.Medium} fontSize={fontR(8)} style={{opacity:0.7}}>1.7Cr Monthly Listener</CustomText>
+            <CustomText  numberOfLines={3} fontSize={fontR(8)} fontFamily={Fonts.Medium} style={{marginTop:5,opacity:0.8}}>{currentPlayingTrack?.artist?.bio}</CustomText>
+        </View>
+      </View>
+      <View style={styles.infoContainer}>
+            <CustomText fontFamily={Fonts.Bold} fontSize={fontR(11)}>Credits</CustomText>
+            <CustomText style={styles.titleText} fontFamily={Fonts.Medium} fontSize={fontR(9)}>{currentPlayingTrack?.artist?.name}</CustomText>
+            <CustomText style={styles.subText} fontFamily={Fonts.Medium} fontSize={fontR(8)}>Main Artist,Composer,Producer</CustomText>
+            <CustomText style={styles.titleText} fontFamily={Fonts.Medium} fontSize={fontR(8)}>{currentPlayingTrack?.lyricist}</CustomText>
+            <CustomText style={styles.subText} fontFamily={Fonts.Medium} fontSize={fontR(8)}>Lyricist</CustomText>
+      </View>
+      <View style={styles.infoContainer}>
+       
+        <View style={styles.modelContainer}>
+          <CustomText fontFamily={Fonts.Bold} fontSize={fontR(16)}>AN Music x Abhishek</CustomText>
+          <CustomText  fontFamily={Fonts.Bold} fontSize={fontR(12)}>made with ❤️</CustomText>
+        </View>
       </View>
     </View>
   )
@@ -119,9 +138,9 @@ const styles = StyleSheet.create({
         padding:20,
         alignItems:'center',
         justifyContent:'center',
-        marginTop:100,
-        marginBottom:40,
-        opacity:0.6
+        
+        
+        opacity:0.9
     },
     artistContainer:{
         backgroundColor:Colors.backgroundLight,

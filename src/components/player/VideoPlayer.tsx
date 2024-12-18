@@ -3,10 +3,10 @@ import React, { FC } from 'react'
 import { screenHeight, screenWidth } from '../../utils/Scaling'
 import Video from 'react-native-video'
 import LinearGradient from 'react-native-linear-gradient'
-const VideoPlayer:FC<{video_uri:any}> = ({video_uri}) => {
+const VideoPlayer:FC<{video_uri:any,pauseVideo:boolean}> = ({video_uri,pauseVideo}) => {
   return (
     <View>
-      {/* { <Video 
+      {!pauseVideo &&  <Video 
         source={video_uri} 
         ignoreSilentSwitch='ignore' 
         playWhenInactive={false} 
@@ -19,7 +19,8 @@ const VideoPlayer:FC<{video_uri:any}> = ({video_uri}) => {
         hideShutterView
         resizeMode='cover'
         shutterColor='transparent'
-       /> } */}
+        paused={pauseVideo}
+       />  }
        <LinearGradient colors={['rgba(0,0,0,0)','rgba(0,0,0,0.1)','rgba(0,0,0,0.2)','rgba(0,0,0,0.3)','rgba(0,0,0,0.4)','rgba(0,0,0,0.5)','rgba(0,0,0,0.6)','rgba(0,0,0,0.7)','rgba(0,0,0,0.8)','rgba(0,0,0,0.9)','rgba(0,0,0,1)']} style={styles.gradient}/>
     </View>
   )
