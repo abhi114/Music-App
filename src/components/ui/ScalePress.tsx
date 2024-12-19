@@ -12,7 +12,7 @@ const ScalePress:FC<ScalePressProps> = ({onLongPress,onPress,children,style}) =>
         Animated.spring(scaleValue,{toValue:0.8,useNativeDriver:true}).start()
     }
     const onPressOut = ()=>{
-        Animated.timing(scaleValue,{toValue:1,duration:300,useNativeDriver:true}).start()
+        Animated.timing(scaleValue,{toValue:1,duration:200,useNativeDriver:true}).start()
     }
   return (
     <TouchableOpacity onPress={onPress} onPressIn={onPressIn} onPressOut={onPressOut} activeOpacity={1} style={style} onLongPress={onLongPress}>

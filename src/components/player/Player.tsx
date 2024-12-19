@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { BOTTOM_TAB_HEIGHT } from "../../utils/Constants";
 import { screenHeight } from "../../utils/Scaling";
 import { BackHandler, Platform, StyleSheet, View } from "react-native";
-import CustomText from "../ui/CustomText";
 import {Gesture, GestureDetector, ScrollView} from 'react-native-gesture-handler'
 import Animated, { interpolate, runOnJS, useAnimatedScrollHandler, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 import { useSharedState } from "../../Features/tabs/SharedContext";
@@ -16,7 +15,7 @@ const withPlayer = <P extends object>(
     WrappedComponent:React.Component<P>
 ):React.FC<P>=>{
     const WithPlayer:React.FC<P>=(props)=>{
-        const {translationY,isScroll,isExpanded,ScrollingEnabled,setScrollingEnabled,expanded,setExpanded,collapsePlayer} = useSharedState();
+        const {translationY,isScroll,isExpanded,ScrollingEnabled,setScrollingEnabled,collapsePlayer} = useSharedState();
         const {currentPlayingTrack}= usePlayerStore();
         console.log("is scroll value is"+ isScroll.value);
         const scrollRef = useRef<Animated.ScrollView>(null)
