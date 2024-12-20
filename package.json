@@ -30,6 +30,7 @@
     "deprecated-react-native-prop-types": "^2.2.0",
     "galio-framework": "^0.8.0",
     "lottie-react-native": "^6.7.2",
+    "lucide-react-native": "^0.469.0",
     "nativewind": "^2.0.11",
     "react": "18.2.0",
     "react-native": "0.74.3",

@@ -5,8 +5,9 @@ import { BOTTOM_TAB_HEIGHT, Colors } from '../../utils/Constants'
 import Animated, { useAnimatedStyle } from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ScalePress from '../../components/ui/ScalePress'
-import { HomeTabIcon, LibraryTabIcon, SearchTabIcon } from './TabIcons'
+import { ChatTabIcon, HomeTabIcon, LibraryTabIcon, SearchTabIcon } from './TabIcons'
 import { useSharedState } from './SharedContext'
+
 
 const CustomTabBar:FC<BottomTabBarProps> = (props) => {
     const {state,navigation} = props
@@ -38,13 +39,24 @@ const CustomTabBar:FC<BottomTabBarProps> = (props) => {
                     target:route.key,
                 })
             }
-            return(
-                    <ScalePress key={index} style={styles.tabItem} onLongPress={onLongPress} onPress={onPress}>
-                            {route?.name === "Home" && <HomeTabIcon focused={isFocused}/>}
-                            {route?.name === "Search" && <SearchTabIcon focused={isFocused}/>}
-                            {route?.name === "Library" && <LibraryTabIcon focused={isFocused}/>}
-                    </ScalePress>
-            )
+            return (
+              <ScalePress
+                key={index}
+                style={styles.tabItem}
+                onLongPress={onLongPress}
+                onPress={onPress}>
+                {route?.name === 'Home' && <HomeTabIcon focused={isFocused} />}
+                {route?.name === 'Search' && (
+                  <SearchTabIcon focused={isFocused} />
+                )}
+                {route?.name === 'Library' && (
+                  <LibraryTabIcon focused={isFocused} />
+                )}
+                {route?.name === 'ChatScreen' && (
+                  <ChatTabIcon focused={isFocused} />
+                )}
+              </ScalePress>
+            );
         })
       }
     </Animated.View>

@@ -2,7 +2,8 @@ import HomeFocused from '../../assets/icons/home_focused.png'
 import SearchFocused from '../../assets/icons/search_focused.png'
 import LibraryFocused from '../../assets/icons/library_focused.png'
 import { RFValue } from "react-native-responsive-fontsize";
-
+import Chat from '../../assets/icons/chat_icon.png'
+import ChatFocused from '../../assets/icons/chat_icon_focused.png';
 import Home from '../../assets/icons/home.png'
 import Search from '../../assets/icons/search.png'
 import Library from '../../assets/icons/library.png'
@@ -45,32 +46,62 @@ const textStyleActive:TextStyle={
     fontSize:fontR(9.5)
 }
 
-const TabIcon:FC<TabProps>=({name})=>{
-    return(
-        <View style={tabStyles}>
-             <Image source={name==='Home'?Home:name==="Search"?Search:Library} style={[styles]}/>
-             <CustomText  style={textStyleInactive}>{name}</CustomText>
-        </View>
-    )
-}
+const TabIcon: FC<TabProps> = ({name}) => {
+  return (
+    <View style={tabStyles}>
+      <Image
+        source={
+          name === 'Home'
+            ? Home
+            : name === 'Search'
+            ? Search
+            : name === 'Library'
+            ? Library
+            : Chat
+        }
+        style={[styles]}
+      />
+      <CustomText style={textStyleInactive}>{name}</CustomText>
+    </View>
+  );
+};
 
-const TabIconFocused:FC<TabProps>=({name})=>{
-    return(
-        <View style={tabStyles}>
-             <Image source={name==='Home'?HomeFocused:name==="Search"?SearchFocused:LibraryFocused} style={[styles]}/>
-             <CustomText  style={textStyleActive}>{name}</CustomText>
-        </View>
-    )
-}
+const TabIconFocused: FC<TabProps> = ({name}) => {
+  return (
+    <View style={tabStyles}>
+      <Image
+        source={
+          name === 'Home'
+            ? HomeFocused
+            : name === 'Search'
+            ? SearchFocused
+            : name === 'Library'
+            ? LibraryFocused
+            : ChatFocused
+        }
+        style={[styles]}
+      />
+      <CustomText style={textStyleActive}>{name}</CustomText>
+    </View>
+  );
+};
 
-export const HomeTabIcon:FC<IconProp>=({focused})=>{
-    return focused ?<TabIconFocused name='Home'/>:<TabIcon name='Home'/>
-}
+export const HomeTabIcon: FC<IconProp> = ({focused}) => {
+  return focused ? <TabIconFocused name="Home" /> : <TabIcon name="Home" />;
+};
 
-export const LibraryTabIcon:FC<IconProp>=({focused})=>{
-    return focused ?<TabIconFocused name='Library'/>:<TabIcon name='Library'/>
-}
+export const LibraryTabIcon: FC<IconProp> = ({focused}) => {
+  return focused ? (
+    <TabIconFocused name="Library" />
+  ) : (
+    <TabIcon name="Library" />
+  );
+};
 
-export const SearchTabIcon:FC<IconProp>=({focused})=>{
-    return focused ?<TabIconFocused name='Search'/>:<TabIcon name='Search'/>
-}
+export const SearchTabIcon: FC<IconProp> = ({focused}) => {
+  return focused ? <TabIconFocused name="Search" /> : <TabIcon name="Search" />;
+};
+
+export const ChatTabIcon: FC<IconProp> = ({focused}) => {
+  return focused ? <TabIconFocused name="Chat" /> : <TabIcon name="Chat" />;
+};
