@@ -6,6 +6,9 @@ module.exports = {
     './component/**/*.{js,jsx,ts,tsx}',
     './component/CoffeeComponent/**/*.{js,jsx,ts,tsx}',
     './navigation/**/*.{js,jsx,ts,tsx}',
+    './src/Features/**/*.{js,jsx,ts,tsx}',
+    './src/**/*.{js,jsx,ts,tsx}',
+    './src/Features/LoginScreen/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     extend: {},

@@ -92,7 +92,7 @@ const withPlayer = <P extends object>(
        const panGesture = Gesture.Pan()
          .onChange(() => {
            if (translationY.value <= -602 && !isScroll.value) {
-             runOnJS(setIsScrollTrue)();
+             //runOnJS(setIsScrollTrue)();
            }
          })
          .onUpdate(event => {

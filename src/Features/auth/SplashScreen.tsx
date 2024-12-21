@@ -8,7 +8,7 @@ const SplashScreen:FC = () => {
   useEffect(() => {
     console.log("here");
     setTimeout(() => {
-       resetAndNavigate('UserBottomTab')
+       resetAndNavigate('LoginScreen')
        //console.log("this also");
     }, 2000);
    
