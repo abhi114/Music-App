@@ -34,6 +34,7 @@ export const fetchLocalTracks = async () => {
       video_uri: null, // Video not available
       artist: defaultArtist, // Default artist details
       category: "Uncategorized", // Placeholder category
+      Type:"Local"
     }));
 
     return trackData;

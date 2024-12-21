@@ -11,43 +11,47 @@ const swanlee = {
 }
 
 export const trackData = [
-    {
-        id: 1,
-        title: "Millionaire",
-        track_uri: require('../assets/tracks/millionaire/music.mp3'),
-        artwork_uri: require('../assets/tracks/millionaire/artwork.jpg'),
-        lyricist: "Leo Grewell",
-        video_uri: require('../assets/tracks/millionaire/video.mp4'),
-        artist: honeySingh,
-        category: "happy"
-    },
-    {
-        id: 2,
-        title: "Brown Rang",
-        track_uri: require('../assets/tracks/brownrang/music.mp3'),
-        artwork_uri: require('../assets/tracks/brownrang/artwork.jpg'),
-        lyricist: "Leo Grewell",
-        artist: honeySingh,
-        category: "neutral"
-    },
-    {
-        id: 3,
-        title: "Desi Kalakar",
-        track_uri: require('../assets/tracks/desikalakar/music.mp3'),
-        artwork_uri: require('../assets/tracks/desikalakar/artwork.jpg'),
-        lyricist: "Leo Grewell",
-        artist: honeySingh,
-        category: "sad"
-    },
-    {
-        id: 4,
-        title: "Sunflower-Spider-Man:Into the Spider-Verse",
-        track_uri: require('../assets/tracks/sunflower/music.mp3'),
-        artwork_uri: require('../assets/tracks/sunflower/artwork.jpg'),
-        lyricist: "Post Malone",
-        artist: swanlee,
-        video_uri: require('../assets/tracks/sunflower/video.mp4'),
-        category: "sad"
-    }
-]
+  {
+    id: 1,
+    title: 'Millionaire',
+    track_uri: require('../assets/tracks/millionaire/music.mp3'),
+    artwork_uri: require('../assets/tracks/millionaire/artwork.jpg'),
+    lyricist: 'Leo Grewell',
+    video_uri: require('../assets/tracks/millionaire/video.mp4'),
+    artist: honeySingh,
+    category: 'happy',
+    Type: 'dummy',
+  },
+  {
+    id: 2,
+    title: 'Brown Rang',
+    track_uri: require('../assets/tracks/brownrang/music.mp3'),
+    artwork_uri: require('../assets/tracks/brownrang/artwork.jpg'),
+    lyricist: 'Leo Grewell',
+    artist: honeySingh,
+    category: 'neutral',
+    Type: 'dummy',
+  },
+  {
+    id: 3,
+    title: 'Desi Kalakar',
+    track_uri: require('../assets/tracks/desikalakar/music.mp3'),
+    artwork_uri: require('../assets/tracks/desikalakar/artwork.jpg'),
+    lyricist: 'Leo Grewell',
+    artist: honeySingh,
+    category: 'sad',
+    Type: 'dummy',
+  },
+  {
+    id: 4,
+    title: 'Sunflower-Spider-Man:Into the Spider-Verse',
+    track_uri: require('../assets/tracks/sunflower/music.mp3'),
+    artwork_uri: require('../assets/tracks/sunflower/artwork.jpg'),
+    lyricist: 'Post Malone',
+    artist: swanlee,
+    video_uri: require('../assets/tracks/sunflower/video.mp4'),
+    category: 'sad',
+    Type: 'dummy',
+  },
+];
 

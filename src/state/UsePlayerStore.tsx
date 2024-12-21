@@ -15,6 +15,7 @@ interface Track {
   artist: any;
   artwork_uri: any;
   category: any;
+  Type:any;
 }
 
 interface PlayerStore{
@@ -51,27 +52,39 @@ export const usePlayerStore = create<PlayerStore>()(
         set({currentPlayingTrack: track});
       },
       setCurrentPlayingTrack: async (track: Track) => {
-        const {allTracks} = get();
+        const {allTracks,localTracks} = get();
         await TrackPlayer.reset();
         set({currentPlayingTrack: track});
         const currentTrackConverted = convertTrack(track); // it converts the object given by our object specs to the background track player
-        const otherTracks = allTracks
-          .filter(t => t.id !== track?.id)
-          .map(t => convertTrack(t));
+        let MainTrack = [];
+        if (track?.Type == 'dummy') {
+          MainTrack = allTracks;
+        } else {
+          MainTrack = localTracks;
+        }
+        const otherTracks = MainTrack.filter(t => t.id !== track?.id).map(t =>
+          convertTrack(t),
+        );
         await TrackPlayer.add([currentTrackConverted, ...otherTracks]);
         await TrackPlayer.play();
       },
       play: async () => {
-        const {currentPlayingTrack, allTracks} = get();
+        const {currentPlayingTrack, allTracks,localTracks} = get();
         const activeTrack = await TrackPlayer.getActiveTrack();
         if (activeTrack) {
           await TrackPlayer.play();
         } else {
+          let MainTrack = [];
+          if (currentPlayingTrack?.Type == 'dummy') {
+            MainTrack = allTracks;
+          } else {
+            MainTrack = localTracks;
+          }
           await TrackPlayer.reset();
           const currentTrackConverted = convertTrack(currentPlayingTrack); // it converts the object given by our object specs to the background track player
-          const otherTracks = allTracks
-            .filter(t => t.id !== currentPlayingTrack?.id)
-            .map(t => convertTrack(t));
+          const otherTracks = MainTrack.filter(
+            t => t.id !== currentPlayingTrack?.id,
+          ).map(t => convertTrack(t));
           await TrackPlayer.add([currentTrackConverted, ...otherTracks]);
           await TrackPlayer.play();
         }
@@ -80,51 +93,66 @@ export const usePlayerStore = create<PlayerStore>()(
         TrackPlayer.pause();
       },
       next: async () => {
-        const {currentPlayingTrack, allTracks, isRepeating} = get();
+        const {currentPlayingTrack, allTracks, isRepeating,localTracks} = get();
+        console.log(currentPlayingTrack?.Type);
+        let MainTrack = [];
+        if(currentPlayingTrack?.Type =='dummy'){
+          MainTrack = allTracks;
+        }else{
+          MainTrack = localTracks;
+        }
+        
+       
         await TrackPlayer.reset();
         if (isRepeating) {
           await TrackPlayer.add([convertTrack(currentPlayingTrack)]);
           await TrackPlayer.play();
           return;
         }
-        const currentIndex = allTracks?.findIndex(
-          track => track.id === currentPlayingTrack?.id,
+        const currentIndex = MainTrack?.findIndex(
+          track => track.title === currentPlayingTrack?.title,
         );
-        let nextindex = (currentIndex + 1) % allTracks?.length; // it will check that in the end if it plays next on the last song then it should go back to the first song
-        if (allTracks.length == 1) {
+        let nextindex = (currentIndex + 1) % MainTrack?.length; // it will check that in the end if it plays next on the last song then it should go back to the first song
+        if (MainTrack.length == 1) {
           nextindex = currentIndex;
         }
-        const nextTrack = allTracks[nextindex];
+        const nextTrack = MainTrack[nextindex];
         if (nextTrack) {
           set({currentPlayingTrack: nextTrack});
-          const otherTracks = allTracks
-            .filter(t => t.id !== nextTrack?.id)
-            .map(t => convertTrack(t));
+          const otherTracks = MainTrack.filter(t => t.id !== nextTrack?.id).map(
+            t => convertTrack(t),
+          );
           await TrackPlayer.add([convertTrack(nextTrack), ...otherTracks]);
           await TrackPlayer.play();
         }
       },
 
       previous: async () => {
-        const {currentPlayingTrack, allTracks, isRepeating} = get();
+        const {currentPlayingTrack, allTracks, isRepeating,localTracks} = get();
         await TrackPlayer.reset();
         if (isRepeating) {
           await TrackPlayer.add([convertTrack(currentPlayingTrack)]);
           await TrackPlayer.play();
           return;
         }
-        const currentIndex = allTracks?.findIndex(
+        let MainTrack = [];
+        if (currentPlayingTrack?.Type == 'dummy') {
+          MainTrack = allTracks;
+        } else {
+          MainTrack = localTracks;
+        }
+        const currentIndex = MainTrack?.findIndex(
           track => track.id === currentPlayingTrack?.id,
         );
         let prevIndex =
-          (currentIndex - 1 + allTracks?.length) % allTracks?.length; // it will check that in the end if it plays next on the last song then it should go back to the first song
+          (currentIndex - 1 + MainTrack?.length) % MainTrack?.length; // it will check that in the end if it plays next on the last song then it should go back to the first song
 
-        const prevTrack = allTracks[prevIndex];
+        const prevTrack = MainTrack[prevIndex];
         if (prevTrack) {
           set({currentPlayingTrack: prevTrack});
-          const otherTracks = allTracks
-            .filter(t => t.id !== prevTrack?.id)
-            .map(t => convertTrack(t));
+          const otherTracks = MainTrack.filter(t => t.id !== prevTrack?.id).map(
+            t => convertTrack(t),
+          );
           await TrackPlayer.add([convertTrack(prevTrack), ...otherTracks]);
           await TrackPlayer.play();
         }
@@ -139,11 +167,17 @@ export const usePlayerStore = create<PlayerStore>()(
         set({isShuffling: false});
       },
       toggleShuffle: async () => {
-        const {currentPlayingTrack, allTracks} = get();
+        const {currentPlayingTrack, allTracks,localTracks} = get();
         await TrackPlayer.reset();
-        const otherTracks = allTracks
-          .filter(t => t.id !== currentPlayingTrack?.id)
-          .map(t => convertTrack(t));
+        let MainTrack = [];
+        if (currentPlayingTrack?.Type == 'dummy') {
+          MainTrack = allTracks;
+        } else {
+          MainTrack = localTracks;
+        }
+        const otherTracks = MainTrack.filter(
+          t => t.id !== currentPlayingTrack?.id,
+        ).map(t => convertTrack(t));
         await TrackPlayer.add([
           convertTrack(currentPlayingTrack),
           ...otherTracks,
@@ -182,6 +216,7 @@ export const usePlayerStore = create<PlayerStore>()(
             video_uri: track.video_uri || placeholderTrack.video_uri,
             artist: track.artist || placeholderTrack.artist,
             category: track.category || placeholderTrack.category,
+            Type:"Local"
           }));
 
           // Append the new tracks to the existing allTracks array

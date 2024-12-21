@@ -37,5 +37,6 @@ export const convertTrack = (track: any) => {
         title: track.title,
         artist: track.artist.name,
         artwork: track.artwork_uri,
+        type:track.Type,
     };
 };

@@ -22,7 +22,10 @@ export const PlayBackService = async()=>{
       if(e?.track?.id == undefined || currentTrack?.id == e?.track?.id){
          return
       }
-      const allTracks = usePlayerStore.getState().allTracks;
+      const allTracks =
+        currentTrack?.Type == 'dummy'
+          ? usePlayerStore.getState().allTracks
+          : usePlayerStore.getState().localTracks;
       const track = allTracks.find((item)=>item.id == e?.track?.id) as any
       usePlayerStore?.getState().setCurrentTrack(track);
 
